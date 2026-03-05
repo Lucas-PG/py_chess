@@ -1,13 +1,13 @@
+from typing import TYPE_CHECKING
+
 from .Piece import Piece
+
+if TYPE_CHECKING:
+    from Board import Board
+
+DIRECTIONS = [(+1, +1), (+1, -1), (-1, -1), (-1, +1)]
 
 
 class Bishop(Piece):
-    def get_legal_moves(self, board) -> list[str]:
-        directions = [
-            (+1, +1),
-            (+1, -1),
-            (-1, -1),
-            (-1, +1),
-        ]
-
-        return super().get_legal_sliding_moves(board, directions)
+    def _compute_legal_moves(self, board: Board) -> list[str]:
+        return self.get_legal_sliding_moves(board, DIRECTIONS)
