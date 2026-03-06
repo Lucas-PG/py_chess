@@ -1,4 +1,4 @@
-- [] Score
+- [x] Score
 - [] Detect check and checkmate
 - [] En passant
 - [] GUI (pydraw)

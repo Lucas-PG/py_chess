@@ -5,11 +5,12 @@ if TYPE_CHECKING:
 
 
 class Piece:
-    def __init__(self, color: str, row: int, col: int, code: str) -> None:
+    def __init__(self, color: str, row: int, col: int, code: str, value: int) -> None:
         self.color = color
         self.row = row
         self.col = col
         self.code = code
+        self.value = value
         self.legal_moves: list[tuple[int, int]] = []
 
     def move(self, board: Board, row: int, col: int) -> None:
@@ -43,6 +44,7 @@ class Piece:
                     legal_moves.append(f"{self.code}{goal_pos}")
                     self.legal_moves.append((next_row, next_col))
                 elif self.color != goal_square.color:
+                    # Take opponent piece
                     legal_moves.append(f"{self.code}x{goal_pos}")
                     self.legal_moves.append((next_row, next_col))
                     break
@@ -73,6 +75,7 @@ class Piece:
                 legal_moves.append(f"{self.code}{goal_pos}")
                 self.legal_moves.append((next_row, next_col))
             elif self.color != goal_square.color:
+                # Take opponent piece
                 legal_moves.append(f"{self.code}x{goal_pos}")
                 self.legal_moves.append((next_row, next_col))
 

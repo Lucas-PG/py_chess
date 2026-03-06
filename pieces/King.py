@@ -12,8 +12,8 @@ DIRECTIONS = [
 
 
 class King(Piece):
-    def __init__(self, color: str, row: int, col: int, code: str) -> None:
-        super().__init__(color, row, col, code)
+    def __init__(self, color: str, row: int, col: int, code: str, value: int) -> None:
+        super().__init__(color, row, col, code, value)
         self.has_moved = False
 
     def move(self, board: Board, row: int, col: int) -> None:

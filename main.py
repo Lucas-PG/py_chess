@@ -12,6 +12,7 @@ if __name__ == "__main__":
         start = input("\nPiece to move: ")
         end = input("Where to move: ")
         if board.make_move(start, end):
+            board.print_score()
             board.print_state()
         else:
             print(f"Invalid move from {start} to {end}")

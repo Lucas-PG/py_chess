@@ -1,6 +1,7 @@
 from pieces import Bishop, King, Knight, Pawn, Queen, Rook
 from pieces.Piece import Piece
 
+# https://www.chess.com/terms/fen-chess
 INITIAL_FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR"
 
 PIECE_TYPES: dict[str, type[Piece]] = {
@@ -14,7 +15,14 @@ PIECE_TYPES: dict[str, type[Piece]] = {
 
 COLS = "abcdefgh"
 
-
+PIECE_VALUES: dict[type[Piece], int] = {
+    King: 0,
+    Queen: 9,
+    Rook: 5,
+    Bishop: 3,
+    Knight: 3,
+    Pawn: 1,
+}
 
 
 class Board:
@@ -30,10 +38,16 @@ class Board:
                     col_idx += int(char)
                 else:
                     color = "white" if char.isupper() else "black"
-                    piece = PIECE_TYPES[char.lower()](color, row_idx, col_idx, char)
+
+                    piece_type = PIECE_TYPES[char.lower()]
+                    value = PIECE_VALUES[piece_type]
+
+                    piece = piece_type(color, row_idx, col_idx, char, value)
                     self.pieces.append(piece)
                     self.state[row_idx][col_idx] = piece
                     col_idx += 1
+
+        self.get_current_score()
 
     def get_square_name(self, row: int, col: int) -> str:
         return f"{COLS[col]}{row + 1}"
@@ -73,14 +87,29 @@ class Board:
         self.turn = 1 - self.turn
         return True
 
+    def get_current_score(self):
+        white_score = black_score = 0
+        for piece in self.pieces:
+            if piece.color == "white":
+                white_score += piece.value
+            else:
+                black_score += piece.value
+
+        return (white_score, black_score)
+
+
+    def print_score(self) -> None:
+        white_score, black_score = self.get_current_score()
+
+        print("Current Score: \n")
+        print(f"\tWhite: {white_score}")
+        print(f"\tBlack: {black_score}")
+
     def print_state(self) -> None:
-        print("  +---+---+---+---+---+---+---+---+")
+        print("\n\t  +---+---+---+---+---+---+---+---+")
         for rank in range(7, -1, -1):
             row = self.state[rank]
-            cells = " | ".join(
-                piece.code if piece else " "
-                for piece in row
-            )
-            print(f"{rank + 1} | {cells} |")
-            print("  +---+---+---+---+---+---+---+---+")
-        print("    a   b   c   d   e   f   g   h")
+            cells = " | ".join(piece.code if piece else " " for piece in row)
+            print(f"\t{rank + 1} | {cells} |")
+            print("\t  +---+---+---+---+---+---+---+---+")
+        print("\t    a   b   c   d   e   f   g   h")
